@@ -28,6 +28,8 @@ class VTexts {
   static const emailField = "email";
   static const emailVerified = "email_verified";
   static const userDisabledField = "user_disabled";
+  static const verifierFieldValue = "verifier";
+  static const adminFieldValue = "admin";
 
   //staff record
   static const staffCollection = "staff";

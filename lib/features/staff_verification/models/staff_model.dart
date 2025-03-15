@@ -1,4 +1,4 @@
-import 'package:staff_verify/data/services/firebase_services/firestore_db/staff_repositories.dart';
+import 'package:staff_verify/data/repositories/staff_repositories.dart';
 
 import '../../../utils/constants/texts.dart';
 

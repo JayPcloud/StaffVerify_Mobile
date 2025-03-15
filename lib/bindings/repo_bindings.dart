@@ -1,13 +1,13 @@
 import 'package:get/get.dart';
-import 'package:staff_verify/data/services/firebase_services/authentication/firebase_auth.dart';
-import 'package:staff_verify/data/services/firebase_services/firestore_db/staff_repositories.dart';
-import 'package:staff_verify/data/services/firebase_services/firestore_db/user_repositories.dart';
+import 'package:staff_verify/data/services/authentication.dart';
+import 'package:staff_verify/data/repositories/staff_repositories.dart';
+import 'package:staff_verify/data/repositories/user_repositories.dart';
 import 'package:staff_verify/features/authentication/controller/forgot_password_controller.dart';
 import 'package:staff_verify/features/authentication/controller/login_controller.dart';
 import 'package:staff_verify/features/authentication/controller/signUp_controller.dart';
 import 'package:staff_verify/features/authentication/controller/verify_email_controller.dart';
 
-import '../data/services/firebase_services/firestore_db/verification_service.dart';
+import '../data/repositories/verification_repositories.dart';
 
 class RepositoriesBinding extends Bindings {
 
@@ -18,7 +18,7 @@ class RepositoriesBinding extends Bindings {
 
     Get.lazyPut<VUserRepository>(()=>VUserRepository());
 
-    Get.lazyPut<VerificationService>(()=>VerificationService());
+    Get.lazyPut<VerificationRepositories>(()=>VerificationRepositories());
 
     Get.lazyPut<VStaffRepositories>(()=>VStaffRepositories());
 

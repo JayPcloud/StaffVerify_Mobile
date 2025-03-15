@@ -37,6 +37,8 @@ dependencies:
   file_saver: ^0.2.14
   pdf: ^3.11.3
   printing: ^5.14.2
+  fancy_shimmer_image: ^2.0.3
+
 
 #  cloudinary_dart: ^1.0.0
 #  cloudinary_api: ^1.0.0

@@ -1,11 +1,12 @@
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:staff_verify/features/staff_verification/controller/verification_result_controller.dart';
 import 'package:staff_verify/utils/constants/enums.dart';
 import 'package:staff_verify/utils/constants/spacing_style.dart';
+import 'package:staff_verify/utils/formatters/date_formatter.dart';
 import 'package:staff_verify/utils/helpers/device.dart';
-
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 
@@ -18,112 +19,123 @@ class VerificationResultScreen extends StatefulWidget {
 }
 
 class _VerificationResultScreenState extends State<VerificationResultScreen> {
-  final argument = Get.arguments;
+
+  final controller = VerificationResultController(Get.arguments);
+
+  @override
+  void initState() {
+    Future.delayed(Duration(milliseconds: 50), (){
+      controller.displayVerificationStatusDialog();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(VerificationResultController(argument));
+
+    if (Get.arguments == null) {
+      return Center(
+        child: Text('No data'),
+      );
+    }
 
     if (controller.vDetails.status == VerificationStatus.success) {
-
       final staff = controller.vDetails.staff;
-
       return PopScope(
           onPopInvokedWithResult: (didPop, result) =>
               Get.delete<VerificationResultController>(),
           child: Scaffold(
-            body: Padding(
-              padding:
-                  VSpacingStyle.paddingWithAppBarHeight.copyWith(bottom: 0),
-              child: Column(
-                children: [
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: Row(
-                        children: [
-                          Text(
-                            "Staff Details",
-                            style: context.textTheme.displayMedium,
-                          ),
-                          Spacer(),
-                          InkWell(
-                            child: Icon(Icons.close),
-                          )
-                        ],
-                      )),
-                  SizedBox(
-                    height: VSizes.defaultSpace,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        controller.vDetails.date.toString(),
-                        style: context.textTheme.bodySmall,
-                      ),
-                      Spacer(),
-                      Text(
-                        "Verified",
-                        style: context.textTheme.labelLarge!
-                            .copyWith(color: VColors.successText),
-                      ),
-                    ],
-                  ),
-                  ClipRRect(
-                    borderRadius:
-                        BorderRadiusDirectional.circular(VSizes.lBRadius),
-                    child: Image.network(
-                      staff!.imageUrl ?? '_',
-                      height: VDeviceUtils.screenHeight * 0.4,
-                      width: double.infinity,
+            body: SingleChildScrollView(
+              child: Padding(
+                padding:
+                    VSpacingStyle.paddingWithAppBarHeight.copyWith(bottom: 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          "Staff Details",
+                          style: context.textTheme.displayMedium,
+                        ),
+                        Spacer(),
+                        InkWell(
+                          onTap: controller.popPage,
+                          child: Icon(Icons.close),
+                        )
+                      ],
                     ),
-                  ),
-                  Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${staff.firstname!} ${staff.lastname!}',
-                            style: GoogleFonts.merriweather(
-                                textStyle: context.textTheme.bodyLarge),
+                    SizedBox(
+                      height: VSizes.defaultSpace,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          'Date:  ${VDateFormatter.historyDateFormatter(controller.vDetails.date ?? DateTime.now())}',
+                          style: context.textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: VSizes.spaceBtwItems),
+                    if (staff!.imageUrl != null) ClipRRect(
+                      borderRadius: BorderRadiusDirectional.circular(VSizes.lBRadius),
+                      child: FancyShimmerImage(
+                        shimmerDuration: Duration(seconds: 5),
+                          imageUrl: staff.imageUrl!,
+                          height: VDeviceUtils.screenHeight * 0.4,
+                          width: VDeviceUtils.screenHeight * 0.4,
+                          boxFit: BoxFit.cover,
+                          boxDecoration: BoxDecoration(
+                            color: context.theme.colorScheme.tertiary,
+                            borderRadius: BorderRadiusDirectional.circular(VSizes.lBRadius),
                           ),
-                          Text(
-                            staff.role!,
-                            style: context.textTheme.titleLarge,
-                          ),
-                        ],
+                        ),
+                    ),
+                    SizedBox(height: VSizes.spaceBtwItems),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${staff.firstname ?? ''} ${staff.lastname ?? ''}',
+                          style: GoogleFonts.merriweather(
+                              textStyle: context.textTheme.labelLarge),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          (staff.role ?? 'Staff Member'),
+                          style: context.textTheme.titleMedium,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: VSizes.defaultSpace,
+                    ),
+                    staffDetailTile(
+                        title: "Staff ID", credential: staff.staffID ?? ''),
+                    staffDetailTile(
+                        title: "Email", credential: staff.email ?? ''),
+                    staffDetailTile(
+                        title: "Phone", credential: staff.mobileNo ?? ''),
+                    staffDetailTile(
+                        title: "Department",
+                        credential: staff.department ?? ''),
+                    staffDetailTile(
+                      title: '',
+                      titleWidget: Text(
+                        "Verification ID",
+                        style: context.textTheme.titleLarge!.copyWith(
+                            color: VColors.successText.withOpacity(0.6)),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      Spacer(),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text("Verification ID",
-                              style: context.textTheme.titleLarge!.copyWith(
-                                  color: VColors.successText.withOpacity(0.6))),
-                          Text(
-                            controller.vDetails.id!,
-                            style: context.textTheme.headlineSmall,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: VSizes.defaultSpace,
-                  ),
-                  staffDetailTile(
-                      title: "Staff ID", credential: staff.staffID.toString()),
-                  staffDetailTile(
-                      title: "Email", credential: staff.email!),
-                  staffDetailTile(
-                      title: "Phone", credential: staff.mobileNo.toString()),
-                  staffDetailTile(title: "Department", credential: staff.department!)
-                ],
+                      credential: controller.vDetails.id ?? '',
+                    ),
+                  ],
+                ),
               ),
             ),
-          )
-      );
-
+          ));
     } else {
       return PopScope(
           onPopInvokedWithResult: (didPop, result) =>
@@ -140,14 +152,20 @@ class _VerificationResultScreenState extends State<VerificationResultScreen> {
     }
   }
 
-  Widget staffDetailTile({required String title, required String credential}) {
+  Widget staffDetailTile(
+      {required String title,
+      Widget? titleWidget,
+      required String credential}) {
     return ListTile(
-      title: Text(
-        title,
-        style: Get.context!.textTheme.titleSmall,
-      ),
+      title: titleWidget ??
+          Text(
+            title,
+            style: Get.context!.textTheme.titleSmall,
+            overflow: TextOverflow.ellipsis,
+          ),
       trailing: Text(
         credential,
+        overflow: TextOverflow.ellipsis,
         style: Get.context!.textTheme.headlineSmall,
       ),
       contentPadding: EdgeInsets.zero,

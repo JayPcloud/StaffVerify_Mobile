@@ -8,7 +8,7 @@ class VerificationMethodCard extends StatelessWidget {
   const VerificationMethodCard({
     super.key,
     required this.index,
-    required this.icon,
+    this.icon,
     required this.surfaceColor,
     this.textColor,
     required this.elevation,
@@ -16,11 +16,12 @@ class VerificationMethodCard extends StatelessWidget {
   });
 
   final int index;
-  final IconData icon;
+  final IconData? icon;
   final Color surfaceColor;
   final Color? textColor;
   final double elevation;
   final VHomeController controller;
+
   @override
   Widget build(BuildContext context) {
     return Expanded(

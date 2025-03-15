@@ -9,3 +9,8 @@ enum VerificationStatus {
   success,
   failed
 }
+
+enum VUserRole {
+  verifier,
+  admin
+}

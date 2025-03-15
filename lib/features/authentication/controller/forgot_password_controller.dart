@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:staff_verify/utils/constants/colors.dart';
-import '../../../data/services/firebase_services/authentication/firebase_auth.dart';
+import '../../../data/services/authentication.dart';
 import '../../../utils/formatters/text_formatter.dart';
 import '../../../utils/helpers/helper_func.dart';
 

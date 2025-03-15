@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import '../../../data/services/firebase_services/authentication/firebase_auth.dart';
+import '../../../data/services/authentication.dart';
 import '../../../routes/routes.dart';
 import '../../../utils/constants/texts.dart';
 import '../../../utils/formatters/text_formatter.dart';
@@ -71,7 +71,13 @@ class VLoginController extends GetxController{
           await _getStorage.remove(VTexts.getStoragePasswordKey);
         }
         VHelperFunc.stopLoadingDialog();
-        Get.offAllNamed(VRoutes.wrapper);
+        try{
+          Get.offAllNamed(VRoutes.wrapper);
+        } catch(e) {
+          Get.offAllNamed(VRoutes.blancLoading);
+          Get.offAllNamed(VRoutes.wrapper);
+        }
+
       } catch(e) {
         VHelperFunc.stopLoadingDialog();
         VHelperFunc.errorNotifier(VTextFormatter.formatFirebaseErrorText(e.toString()));

@@ -11,25 +11,20 @@ import '../../../utils/validators/textField_validators.dart';
 import '../components/gender_dropDown_FormField.dart';
 import '../controller/staff_reg_controller.dart';
 
-class VStaffRegScreen extends StatefulWidget {
+class VStaffRegScreen extends StatelessWidget {
   const VStaffRegScreen({super.key});
 
   @override
-  State<VStaffRegScreen> createState() => _VStaffRegScreenState();
-}
-
-final _controller = Get.put(VStaffRegController());
-
-class _VStaffRegScreenState extends State<VStaffRegScreen> {
-
-  @override
   Widget build(BuildContext context) {
+
+    final controller = VStaffRegController();
+
     return Scaffold(
       bottomNavigationBar: Padding(
         padding: VSpacingStyle.defaultPadding,
         child: VActionButton(
             actionText: 'Continue',
-          onPressed: _controller.displayConfirmationDialog,
+          onPressed: controller.displayConfirmationDialog,
           radius: VSizes.smallBRadius,
         ),
       ),
@@ -40,7 +35,7 @@ class _VStaffRegScreenState extends State<VStaffRegScreen> {
               padding: VSpacingStyle.paddingWithAppBarHeight.copyWith(left: VSizes.smallSpace),
               child: Row(
                 children: [
-                IconButton(onPressed:(){}, icon: const Icon(Icons.arrow_back_outlined)),
+                IconButton(onPressed:Get.back, icon: const Icon(Icons.arrow_back_outlined)),
                 SizedBox(width: VSizes.defaultSpace,),
                 Text("Add Employee",style: context.textTheme.displaySmall,)
               ],),
@@ -56,19 +51,23 @@ class _VStaffRegScreenState extends State<VStaffRegScreen> {
               child: Padding(
                 padding: VSpacingStyle.defaultPadding.copyWith(left: VSizes.defaultSpace, right: VSizes.defaultSpace),
                 child: Form(
-                  key: _controller.formKey,
+                  key: controller.formKey,
                   child: Column(
                     spacing: VSizes.defaultSpace,
                     children: [
                     GestureDetector(
-                      onTap: _controller.imagePicker.displayPickImageDialog,
+                      onTap: controller.imagePicker.displayPickImageDialog,
                       child: Obx((){
-                        if(_controller.imagePicker.pickedImage.value != null) {
+                        if(controller.imagePicker.pickedImage.value != null) {
                           return Column(
                             children: [
                               CircleAvatar(
-                                radius: VDeviceUtils.screenWidth * 0.17,
-                                backgroundImage: Image.file(File(_controller.imagePicker.pickedImage.value!.path)).image,),
+                                radius:VDeviceUtils.screenWidth * 0.171,
+                                backgroundColor: context.theme.primaryColor,
+                                child: CircleAvatar(
+                                  radius: VDeviceUtils.screenWidth * 0.17,
+                                  backgroundImage: Image.file(File(controller.imagePicker.pickedImage.value!.path)).image,),
+                              ),
                               SizedBox(height: VSizes.smallSpace,),
                               Text("Tap to change photo", style: context.textTheme.titleMedium!.copyWith(fontSize: VSizes.fontSizeXSm),)
 
@@ -84,16 +83,18 @@ class _VStaffRegScreenState extends State<VStaffRegScreen> {
                         }
                       } ),
                     ),
-                    VStaffRegFormField(title: "First Name", controller: _controller.firstnameTxtCtrl),
-                    VStaffRegFormField(title: "Last Name", controller: _controller.lastnameTxtCtrl),
-                    VSelectGenderDropDown(controller: _controller,),
-                    VStaffRegFormField(title: "Email",controller: _controller.emailTxtCtrl, hintText: 'e.g example@gmail.com',validator:(value)=>VTextFieldValidator.emailValidator(value),),
-                    VStaffRegFormField(title: "Phone", controller: _controller.phoneTxtCtrl, hintText: 'Include country code; e.g +234', validator: (value)=> VTextFieldValidator.phoneNumberValidator(value), ),
+                    VStaffRegFormField(title: "First Name", controller: controller.firstnameTxtCtrl),
+                    VStaffRegFormField(title: "Last Name", controller: controller.lastnameTxtCtrl),
+                    VSelectGenderDropDown(controller: controller,),
+                    VStaffRegFormField(title: "Email",controller: controller.emailTxtCtrl, hintText: 'e.g example@gmail.com',validator:(value)=>VTextFieldValidator.emailValidator(value),),
+                    VStaffRegFormField(title: "Phone", controller: controller.phoneTxtCtrl, hintText: 'Include country code; e.g +234', validator: (value)=> VTextFieldValidator.phoneNumberValidator(value), ),
                     Row(
                       children: [
-                        Expanded(child: VStaffRegFormField(title: "Department", controller: _controller.deptTxtCtrl, hintText: 'e.g Production',)),
+                        Expanded(child: VStaffRegFormField(title: "Department", controller: controller.deptTxtCtrl, hintText: 'e.g Production',)),
                         SizedBox(width: VSizes.spaceBtwItems,),
-                        Expanded(child: VStaffRegFormField(title: "Role",controller: _controller.roleTxtCtrl, hintText: 'Optional', required: false,)),
+                        Expanded(child: VStaffRegFormField(title: "Role",controller: controller.roleTxtCtrl, hintText: 'Optional', required: false,validator: (_){
+                          return null;
+                        },)),
                       ],
                     ),
 
@@ -106,12 +107,5 @@ class _VStaffRegScreenState extends State<VStaffRegScreen> {
       ),
     );
   }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose;
-  }
-
 }
 

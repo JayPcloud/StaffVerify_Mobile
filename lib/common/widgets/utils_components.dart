@@ -97,14 +97,14 @@ class VUtilsComponents {
     );
   }
 
-  static GetSnackBar snackBarNotifier({required String msg, SnackPosition? position, Color? txtColor}) {
+  static GetSnackBar snackBarNotifier({required String msg, SnackPosition? position, Color? txtColor, double? colorOpacity}) {
     return GetSnackBar(
       snackPosition: position??SnackPosition.BOTTOM,
       duration: Duration(seconds: 3),
       animationDuration: Duration(milliseconds: 500),
       dismissDirection: DismissDirection.horizontal,
       borderRadius: VSizes.smallBRadius,
-      backgroundColor: Get.context!.theme.primaryColor.withOpacity(0.5),
+      backgroundColor: Get.context!.theme.primaryColor.withOpacity(colorOpacity??0.5),
       margin: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
       messageText: Center(
         child: Text(

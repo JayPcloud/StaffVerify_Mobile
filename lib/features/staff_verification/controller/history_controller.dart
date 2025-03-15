@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:staff_verify/data/services/firebase_services/firestore_db/verification_service.dart';
+import 'package:staff_verify/data/repositories/verification_repositories.dart';
 
 class VHistoryController extends GetxController {
 
@@ -32,7 +32,7 @@ class VHistoryController extends GetxController {
 
   late StreamSubscription<QuerySnapshot> _subscription;
 
-  final _vService = VerificationService();
+  final _vService = VerificationRepositories();
 
   final ScrollController _scrollController = ScrollController();
 

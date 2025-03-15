@@ -22,27 +22,21 @@ class VSelectGenderDropDown extends StatelessWidget {
         controller: controller.genderTxtController.value,
         canFocus: false,
         enableInteractiveSelection: false,
-        suffixIcon:DropdownButtonHideUnderline(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: VSizes.spaceBtwItems),
-            child: DropdownButton(
-              isDense: true,
-              focusNode: controller.genderDropDownFocus,
-              menuWidth: VDeviceUtils.screenWidth * 0.35,
-              dropdownColor: context.theme.colorScheme.tertiary,
-              value: controller.gender.value,
-              borderRadius: BorderRadius.circular(VSizes.smallBRadius),
-              icon: Icon(Icons.keyboard_arrow_down_sharp,),
-              items: <DropdownMenuItem<dynamic>>[
-                DropdownMenuItem(
-                    value: controller.genderList[0],
-                    child: Text(controller.genderList[0])),
-                DropdownMenuItem(
-                    value: controller.genderList[1],
-                    child: Text(controller.genderList[1])),
-              ],
-              onChanged: (value) => controller.onGenderSelected(value),
-            ),
+        suffixIcon:Padding(
+          padding: const EdgeInsets.symmetric(horizontal: VSizes.spaceBtwItems),
+          child: PopupMenuButton(
+            color: context.theme.colorScheme.tertiary,
+            borderRadius: BorderRadius.circular(VSizes.smallBRadius),
+            icon: Icon(Icons.keyboard_arrow_down_sharp,),
+            itemBuilder: (context) =>  [
+              PopupMenuItem(
+                  value: controller.genderList[0],
+                  child: Text(controller.genderList[0])),
+              PopupMenuItem(
+                  value: controller.genderList[1],
+                  child: Text(controller.genderList[1])),
+            ],
+            onSelected: (value) => controller.onGenderSelected(value),
           ),
         ),
       ),

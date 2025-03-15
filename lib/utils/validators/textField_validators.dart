@@ -13,19 +13,27 @@ class VTextFieldValidator {
       return "Invalid Email Format";
     }
 
+    if(value.length > 50) {
+      return '50 max character length';
+    }
+
     return null;
   }
 
 
-  static String? maxCharValidator({required String? value, required int max,}) {
+  static String? maxCharValidator({required String? value, required int min,}) {
 
     if(value == null || value.trim().isEmpty) {
       return "Required Field";
     }
 
-    if(value.length < max) {
-      return "Must be up to $max characters";
+    if(value.length < min) {
+      return "Must be up to $min characters";
 
+    }
+
+    if(value.length > 30) {
+      return '30 max character length';
     }
 
     return null;
@@ -49,6 +57,10 @@ class VTextFieldValidator {
 
     if(!value.isPhoneNumber) {
      return "Invalid phone number";
+    }
+
+    if(value.length > 30) {
+      return '30 max character length';
     }
 
     return null;

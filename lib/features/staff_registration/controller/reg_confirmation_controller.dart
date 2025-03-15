@@ -1,8 +1,6 @@
 import 'dart:typed_data';
 import 'package:file_saver/file_saver.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
@@ -18,16 +16,6 @@ class VRegConfirmationController extends GetxController {
 
   final Staff staff;
   VRegConfirmationController({required this.staff});
-
-  @override
-  void onInit() {
-    Future.delayed(Duration(milliseconds: 100), ()=> VHelperFunc.snackBarNotifier(
-        msg: 'Registration Successful',
-      txtColor: VColors.whiteText,
-      position: SnackPosition.TOP
-    ));
-    super.onInit();
-  }
 
   RxBool generatingPdf = false.obs;
 

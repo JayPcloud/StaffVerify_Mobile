@@ -6,10 +6,6 @@ import '../components/dialogs.dart';
 
 class VImagePickerController extends GetxController{
 
-  VImagePickerController._();
-
-  static VImagePickerController instance = VImagePickerController._();
-
   final _imagePicker = ImagePicker();
 
   Rx<XFile?> pickedImage = Rx(null);

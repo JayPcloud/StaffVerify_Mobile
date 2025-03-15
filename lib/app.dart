@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:staff_verify/features/staff_registration/screen/registration_confirmation.dart';
-import 'package:staff_verify/features/staff_registration/screen/staff_registration.dart';
-import 'package:staff_verify/features/staff_verification/screens/barcode_scanner.dart';
-import 'package:staff_verify/features/staff_verification/screens/verification_result.dart';
 import 'package:staff_verify/routes/routes.dart';
 import 'package:staff_verify/theme/theme_data.dart';
 

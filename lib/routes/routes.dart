@@ -10,6 +10,7 @@ import 'package:staff_verify/features/staff_verification/screens/home_main.dart'
 import 'package:staff_verify/features/staff_verification/screens/verification_result.dart';
 
 import '../bindings/repo_bindings.dart';
+import '../features/authentication/screens/blanc_screen.dart';
 
 class VRoutes {
 
@@ -24,7 +25,9 @@ class VRoutes {
   static String get emailVer => "/email_verification";
   static String get home => "/home";
   static String get vResults => "/verification_results";
+  static String get staffReg => "/staff_registration";
   static String get vRegConfirm => "/registration_confirm";
+  static String get blancLoading => "/blanc_loading";
 
   List<GetPage<dynamic>>? pages = [
     GetPage(name: wrapper, page:()=>VWrapper(),),
@@ -34,6 +37,9 @@ class VRoutes {
     GetPage(name: emailVer, page:()=>VEmailVerificationScreen(),),
     GetPage(name: home, page:()=>VHomeScreen(), binding: RepositoriesBinding()),
     GetPage(name: vResults, page:()=>VerificationResultScreen(), binding: RepositoriesBinding()),
+    GetPage(name: staffReg, page:()=>VStaffRegScreen(), binding: RepositoriesBinding()),
     GetPage(name: vRegConfirm, page:()=>VRegConfirmationScreen(), binding: RepositoriesBinding()),
+    GetPage(name: blancLoading, page:()=>VBlancLoadingScreen(),),
   ];
+
 }

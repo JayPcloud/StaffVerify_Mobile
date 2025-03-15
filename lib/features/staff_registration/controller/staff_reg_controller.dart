@@ -2,16 +2,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:staff_verify/common/widgets/utils_components.dart';
-import 'package:staff_verify/data/services/firebase_services/firestore_db/staff_repositories.dart';
+import 'package:staff_verify/data/repositories/staff_repositories.dart';
 import 'package:staff_verify/features/staff_registration/controller/select_image_controller.dart';
 import 'package:staff_verify/features/staff_verification/models/staff_model.dart';
 import 'package:staff_verify/routes/routes.dart';
 import 'package:staff_verify/utils/helpers/helper_func.dart';
 
-class VStaffRegController extends GetxController {
+class VStaffRegController {
 
   final _staffRepo = VStaffRepositories();
-  final imagePicker = VImagePickerController.instance;
+  final imagePicker = VImagePickerController();
 
   Rx<String?> gender = null.obs;
 
@@ -34,6 +34,17 @@ class VStaffRegController extends GetxController {
 
   void onGenderSelected(String value) => genderTxtController.value.text = value;
 
+  void _clearAllInputs() {
+    firstnameTxtCtrl.clear();
+    lastnameTxtCtrl.clear();
+    emailTxtCtrl.clear();
+    phoneTxtCtrl.clear();
+    deptTxtCtrl.clear();
+    roleTxtCtrl.clear();
+    genderTxtController.value.clear();
+    imagePicker.pickedImage.value = null;
+  }
+
   void displayConfirmationDialog() {
 
     if(imagePicker.pickedImage.value == null) {
@@ -55,7 +66,7 @@ class VStaffRegController extends GetxController {
 
   void registerStaff() async {
     Get.back();
-    showDialog(context: Get.context!, builder: (context) => VUtilsComponents.actionLoader("Registering staff, please wait..."),);
+    showDialog(context: Get.context!, builder: (context) => VUtilsComponents.actionLoader("Registration in progress..."),);
 
     final String staffImgFilePath = imagePicker.pickedImage.value!.path;
 
@@ -73,7 +84,8 @@ class VStaffRegController extends GetxController {
     );
     try{
       final String staffId = await _staffRepo.registerStaff(staff: staff, staffImagePath: staffImgFilePath);
-      Get.offAndToNamed(VRoutes.vRegConfirm, arguments: staffId);
+      await Get.offAndToNamed(VRoutes.vRegConfirm, arguments: staffId);
+      _clearAllInputs();
     } catch(e) {
       Get.back();
       VHelperFunc.errorNotifier(e.toString());
@@ -83,10 +95,4 @@ class VStaffRegController extends GetxController {
 
   }
 
-  @override
-  void dispose() {
-    genderDropDownFocus.dispose();
-    imagePicker.dispose();
-    super.dispose();
-  }
 }

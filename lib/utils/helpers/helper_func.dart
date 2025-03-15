@@ -21,9 +21,9 @@ class VHelperFunc extends GetxController {
     Get.showSnackbar(VUtilsComponents.errorSnackBarNotifier(err, SnackPosition.TOP));
   }
 
-  static void snackBarNotifier({required String msg, SnackPosition? position, Color? txtColor}) {
+  static void snackBarNotifier({required String msg, SnackPosition? position, Color? txtColor, double? colorOpacity}) {
     Get.closeAllSnackbars();
-    Get.showSnackbar(VUtilsComponents.snackBarNotifier(msg: msg,position: position, txtColor: txtColor));
+    Get.showSnackbar(VUtilsComponents.snackBarNotifier(msg: msg,position: position, txtColor: txtColor,colorOpacity:colorOpacity ));
   }
 
 }

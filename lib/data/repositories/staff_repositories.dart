@@ -5,8 +5,8 @@ import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:staff_verify/features/staff_verification/models/staff_model.dart';
-import '../../../../utils/constants/texts.dart';
-import '../../cloud_storage.dart';
+import '../../utils/constants/texts.dart';
+import '../services/cloud_storage.dart';
 
 class VStaffRepositories extends GetxController {
 
@@ -62,18 +62,7 @@ class VStaffRepositories extends GetxController {
         transaction.set(doc.reference, {VTexts.totalStaffDocRef: 1});
       }
 
-      // final VQRCodeGenerator qrCode = VQRCodeGenerator(qrData: generatedStaffID);
-
       final String staffImgUrl = staffImgUploadResp.secureUrl;
-      // String? qrCodeImgUrl;
-
-      // try{
-      //   final File qrImageFile = await qrCode.qrWidgetToFile(key: qrCodeGenKey);
-      //   final CloudinaryResponse? qrImageUploadResp = await _cloudStorage.uploadImage(imageFile: qrImageFile,subfolderName: VTexts.staffImageFolder,);
-      //   qrCodeImgUrl = qrImageUploadResp?.secureUrl;
-      // } catch(e) {
-      //   print(e);
-      // }
 
       transaction.set(_db.collection(VTexts.staffCollection).doc(), staff.toJson(id: generatedStaffID, imageUrl:staffImgUrl));
 

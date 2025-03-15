@@ -59,7 +59,7 @@ class VStaffRegFormField extends StatelessWidget {
             cursorColor: context.theme.primaryColorDark,
             validator: validator ??
                 (value) =>
-                    VTextFieldValidator.maxCharValidator(value: value, max: 4),
+                    VTextFieldValidator.maxCharValidator(value: value, min: 4),
             decoration: InputDecoration(
                 filled: true,
                 suffixIcon: suffixIcon,

@@ -28,45 +28,44 @@ class VHistoryTabView extends StatelessWidget {
           }
 
           return SingleChildScrollView(
-              controller: controller.scrollController,
-              child: Padding(
-                padding: VSpacingStyle.paddingWithAppBarHeight
-                    .copyWith(top: VSizes.spaceBtwSections),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Verification History",
-                      style: context.textTheme.displaySmall,
-                    ),
-                    SizedBox(
-                      height: VSizes.spaceBtwSections,
-                    ),
-                    ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        padding: EdgeInsets.zero,
-                        itemCount: controller.histories.length,
-                        itemBuilder: (context, index) {
-                          final history = VHistoryModel.fromJson(controller.histories[index] as DocumentSnapshot<Map<String, dynamic>> );
-                          return VHistoryTile(
-                            history: VHistoryModel(
-                                verificationStatus: history.verificationStatus,
-                                vMethod: history.vMethod,
-                                vid: history.vid,
-                                timestamp: history.timestamp),
-                          );
-                        }
-                    ),
-
-                    if(controller.isLoadingMore.value) Padding(
-                      padding: const EdgeInsets.symmetric(vertical: VSizes.smallSpace),
-                      child: Center(child: Text("Loading more...")),
-                    )
-                  ],
-                ),
+            child: Padding(
+              padding: VSpacingStyle.paddingWithAppBarHeight
+                  .copyWith(top: VSizes.spaceBtwSections),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Verification History",
+                    style: context.textTheme.displaySmall,
+                  ),
+                  SizedBox(
+                    height: VSizes.defaultSpace,
+                  ),
+                  ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      padding: EdgeInsets.zero,
+                      itemCount: controller.histories.length,
+                      itemBuilder: (context, index) {
+                        final history = VHistoryModel.fromJson(controller.histories[index] as DocumentSnapshot<Map<String, dynamic>> );
+                        return VHistoryTile(
+                          history: VHistoryModel(
+                              verificationStatus: history.verificationStatus,
+                              vMethod: history.vMethod,
+                              vid: history.vid,
+                              timestamp: history.timestamp),
+                        );
+                      }
+                  ),
+            
+                  if(controller.isLoadingMore.value) Padding(
+                    padding: const EdgeInsets.symmetric(vertical: VSizes.smallSpace),
+                    child: Center(child: Text("Loading more...")),
+                  )
+                ],
               ),
-            );
+            ),
+          );
         }
       ),
     );

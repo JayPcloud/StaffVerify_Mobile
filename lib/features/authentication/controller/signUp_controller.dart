@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:staff_verify/data/services/firebase_services/authentication/firebase_auth.dart';
-import 'package:staff_verify/data/services/firebase_services/firestore_db/user_repositories.dart';
+import 'package:staff_verify/data/services/authentication.dart';
+import 'package:staff_verify/data/repositories/user_repositories.dart';
 import 'package:staff_verify/routes/routes.dart';
 import 'package:staff_verify/utils/constants/colors.dart';
 import 'package:staff_verify/utils/constants/texts.dart';

@@ -54,7 +54,7 @@ class VAuthFormField extends StatelessWidget {
             validator: validator ??
                 (value) => title == VTexts.email
                     ? VTextFieldValidator.emailValidator(value)
-                    : VTextFieldValidator.maxCharValidator(value: value, max: 6),
+                    : VTextFieldValidator.maxCharValidator(value: value, min: 6),
             decoration: InputDecoration(
               filled: true,
               hintText: hintText,

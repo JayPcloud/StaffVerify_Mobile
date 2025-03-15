@@ -9,15 +9,9 @@ class VerificationResultController extends GetxController {
 
   VerificationResultController(this.vDetails);
 
-  @override
-  void onInit() {
-    Future.delayed(Duration(milliseconds: 50), (){
-      displayVerificationStatusDialog();
-    });
-    super.onInit();
-  }
-
   static void popVStatusDialog()=> Get.back();
+
+  void popPage()=> Get.back();
 
   static String vMethodToString(VerificationMethod vMethod) {
     switch (vMethod) {
