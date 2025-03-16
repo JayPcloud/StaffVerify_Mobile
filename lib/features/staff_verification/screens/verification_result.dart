@@ -24,9 +24,12 @@ class _VerificationResultScreenState extends State<VerificationResultScreen> {
 
   @override
   void initState() {
-    Future.delayed(Duration(milliseconds: 50), (){
-      controller.displayVerificationStatusDialog();
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_){
+          if(mounted) {
+            controller.displayVerificationStatusDialog();
+          }
+        }
+    );
     super.initState();
   }
 

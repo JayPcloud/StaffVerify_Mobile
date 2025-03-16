@@ -69,6 +69,7 @@ class VTexts {
   //Image_Strings
   static const successVerificationIconPng = "assets/images/successful_verification_icon.png";
   static const failedVerificationIconPng = "assets/images/failed_verification_icon.png";
+  static const appLogo = "assets/logos/StaffVerify_App Logo.png";
 
   //Icon Image Strings
   static const noPhotoIcon = "assets/icons/nophoto_icon.png";

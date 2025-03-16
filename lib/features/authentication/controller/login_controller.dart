@@ -71,12 +71,10 @@ class VLoginController extends GetxController{
           await _getStorage.remove(VTexts.getStoragePasswordKey);
         }
         VHelperFunc.stopLoadingDialog();
-        try{
-          Get.offAllNamed(VRoutes.wrapper);
-        } catch(e) {
-          Get.offAllNamed(VRoutes.blancLoading);
-          Get.offAllNamed(VRoutes.wrapper);
-        }
+
+        Get.offAllNamed(VRoutes.blancLoading);
+        await Future.delayed(Duration(milliseconds: 500));
+        Get.offAllNamed(VRoutes.wrapper);
 
       } catch(e) {
         VHelperFunc.stopLoadingDialog();

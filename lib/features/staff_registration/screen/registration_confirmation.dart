@@ -26,20 +26,21 @@ class _VRegConfirmationScreenState extends State<VRegConfirmationScreen> {
 
   @override
   void initState() {
-    Future.delayed(Duration(milliseconds: 100), ()=> VHelperFunc.snackBarNotifier(
-        msg: 'Registration Successful',
-        txtColor: VColors.whiteText,
-        position: SnackPosition.TOP,
-        colorOpacity:1
-    ));
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      VHelperFunc.snackBarNotifier(
+          msg: 'Registration Successful',
+          txtColor: VColors.whiteText,
+          position: SnackPosition.TOP,
+          colorOpacity:1
+      );
+    });
     super.initState();
   }
 
+  final String? staffId = Get.arguments;
+
   @override
   Widget build(BuildContext context) {
-
-    final String? staffId = Get.arguments;
-
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -47,7 +48,7 @@ class _VRegConfirmationScreenState extends State<VRegConfirmationScreen> {
         title: Text('Registration Details', style: context.textTheme.displaySmall),
       ),
       body: staffId!=null?FutureBuilder(
-        future: VStaffRepositories().getStaff(VTexts.staffIDField, staffId),
+        future: VStaffRepositories().getStaff(VTexts.staffIDField, staffId!),
         builder: (context, snapshot) {
           if(snapshot.hasData) {
             final Staff staff = Staff.fromJson(snapshot.data![0].data());
@@ -82,7 +83,7 @@ class _VRegConfirmationScreenState extends State<VRegConfirmationScreen> {
                             ),
                           ),
 
-                          Text(staff.role??'Staff Member', style: context.textTheme.bodyMedium ),
+                          Text(staff.role!, style: context.textTheme.bodyMedium ),
                         ],
                       )
                     ],
@@ -107,7 +108,7 @@ class _VRegConfirmationScreenState extends State<VRegConfirmationScreen> {
                         SizedBox(height: VSizes.defaultSpace,),
                         MaterialButton(
                           shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.circular(VSizes.smallBRadius,),side: BorderSide(color: context.theme.primaryColor)),
-                          onPressed: controller.savePdf,
+                          onPressed: !controller.generatingPdf.value?controller.generateAndSavePdf:null,//controller.openFile,
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [

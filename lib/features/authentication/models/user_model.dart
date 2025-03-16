@@ -1,5 +1,4 @@
 import 'package:staff_verify/utils/constants/texts.dart';
-
 import '../../../utils/constants/enums.dart';
 
 class VUserModel {

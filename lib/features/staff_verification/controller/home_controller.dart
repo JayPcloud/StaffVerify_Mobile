@@ -13,7 +13,6 @@ import 'package:staff_verify/utils/constants/enums.dart';
 import 'package:staff_verify/utils/constants/texts.dart';
 import 'package:staff_verify/utils/formatters/text_formatter.dart';
 import 'package:staff_verify/utils/helpers/helper_func.dart';
-import 'package:staff_verify/utils/validators/textField_validators.dart';
 import '../../../data/repositories/staff_repositories.dart';
 
 class VHomeController extends GetxController {
@@ -55,7 +54,7 @@ class VHomeController extends GetxController {
 
   final RxBool txtFieldNotEmpty = false.obs;
 
-  final Rx<String?> _scanBarcode = null.obs;
+  String? _scanBarcode;
 
   void textFieldOnChanged(String value) {
     if(value.isNotEmpty) {
@@ -116,29 +115,37 @@ class VHomeController extends GetxController {
   Future<void> verifyStaff(VerificationMethod vMethod) async {
     focusNode.value.unfocus();
     try {
-      if (formKey!.currentState!.validate()) {
-        List<QueryDocumentSnapshot<Map<String, dynamic>>>? docs;
+
+      List<QueryDocumentSnapshot<Map<String, dynamic>>>? docs;
+
+      if(vMethod == VerificationMethod.qrCode){
 
         VHelperFunc.startLoadingDialog(action: "Verifying Identity...");
+          docs = await _staffRepo.getStaff(
+              VTexts.qrcodeField, _scanBarcode!.trim());
 
-        if (vMethod == VerificationMethod.staffID) {
-          docs = await _staffRepo.getStaff(
-              VTexts.staffIDField, textFieldController.value.text.trim());
-        } else if (vMethod == VerificationMethod.email) {
-          docs = await _staffRepo.getStaff(
-              VTexts.emailField, textFieldController.value.text.trim());
-        } else if (vMethod == VerificationMethod.mobileNo) {
-          docs = await _staffRepo.getStaff(
-              VTexts.mobileNoField, textFieldController.value.text.trim());
-        } else if(vMethod == VerificationMethod.qrCode) {
-          docs = await _staffRepo.getStaff(
-              VTexts.qrcodeField, _scanBarcode.value!.trim());
         }else {
-          docs = [];
+
+        if (formKey.currentState!.validate()) {
+          VHelperFunc.startLoadingDialog(action: "Verifying Identity...");
+
+          if (vMethod == VerificationMethod.staffID) {
+            docs = await _staffRepo.getStaff(
+                VTexts.staffIDField, textFieldController.value.text.trim());
+          } else if (vMethod == VerificationMethod.email) {
+            docs = await _staffRepo.getStaff(
+                VTexts.emailField, textFieldController.value.text.trim());
+          } else if (vMethod == VerificationMethod.mobileNo) {
+            docs = await _staffRepo.getStaff(
+                VTexts.mobileNoField, textFieldController.value.text.trim());
+          } else {
+            docs = [];
+          }
         }
+      }
 
         final history = await recordVerification(
-            verified: docs.isNotEmpty,
+            verified: docs!.isNotEmpty,
             vMethod: vMethod,
             staff: docs.isNotEmpty?Staff.fromJson(docs[0].data()):null);
 
@@ -167,7 +174,7 @@ class VHomeController extends GetxController {
                 date: history.timestamp?.toDate(),
                 vMethod: vMethod));
         return;
-      }
+
     } catch (e) {
       ///------------remove---------------///
       print(e.toString());
@@ -190,25 +197,27 @@ class VHomeController extends GetxController {
       barcodeScanRes = 'Failed to get platform version.';
       VHelperFunc.errorNotifier(barcodeScanRes);
       return;
+    } catch(e) {
+      barcodeScanRes = e.toString();
+      print(barcodeScanRes);
+      VHelperFunc.errorNotifier(VTexts.defaultErrorMessage);
+      return;
     }
 
-    if (Get.context!.mounted) return;
 
-    _scanBarcode.value = barcodeScanRes;
+      _scanBarcode = barcodeScanRes;
 
-    if(_scanBarcode.value != null && _scanBarcode.value != '-1') {
-
-      final errMsg = VTextFieldValidator.maxCharValidator(value: _scanBarcode.value, min: 5);
-      if(errMsg != null) {
-        VHelperFunc.errorNotifier("Invalid QR code. Please scan a valid staff QR code");
+      if (_scanBarcode == null) {
+        VHelperFunc.errorNotifier('Invalid QR code');
         return;
       }
 
-      await verifyStaff(VerificationMethod.qrCode);
+      if (_scanBarcode != null && _scanBarcode != '-1') {
+        await verifyStaff(VerificationMethod.qrCode);
+      } else {
+        VHelperFunc.errorNotifier(VTexts.defaultErrorMessage);
+      }
 
-    } else {
-      VHelperFunc.errorNotifier(VTexts.defaultErrorMessage);
-    }
   }
 
 
