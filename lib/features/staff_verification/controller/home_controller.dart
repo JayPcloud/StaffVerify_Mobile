@@ -141,11 +141,13 @@ class VHomeController extends GetxController {
           } else {
             docs = [];
           }
+        }else {
+          return;
         }
       }
 
         final history = await recordVerification(
-            verified: docs!.isNotEmpty,
+            verified: docs.isNotEmpty,
             vMethod: vMethod,
             staff: docs.isNotEmpty?Staff.fromJson(docs[0].data()):null);
 
@@ -215,7 +217,7 @@ class VHomeController extends GetxController {
       if (_scanBarcode != null && _scanBarcode != '-1') {
         await verifyStaff(VerificationMethod.qrCode);
       } else {
-        VHelperFunc.errorNotifier(VTexts.defaultErrorMessage);
+        //VHelperFunc.errorNotifier(VTexts.defaultErrorMessage);
       }
 
   }

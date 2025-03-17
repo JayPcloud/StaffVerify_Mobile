@@ -59,7 +59,6 @@ flutter:
 
 #---------------ASSETS------------------------#
   assets:
-    - assets/images/
     - assets/logos/
     - assets/icons/
 
@@ -70,16 +69,20 @@ flutter_native_splash:
   web: false
 
   color: '2E4053'
-  image: 'assets/logos/staff-verify-splashLogo.png'
+  image: 'assets/logos/splashscreen_logo.png'
+  branding: 'assets/logos/brandingSplash.png'
+  branding_bottom_padding: 15
 
   android_12:
     color: '2E4053'
-    image: 'assets/logos/staff-verify-splashLogo.png'
+    image: 'assets/logos/splashscreen_logo.png'
+    branding: 'assets/logos/splashBranding_txt.png'
+    branding_bottom_padding: 15
 
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: "AppIcon"
-  image_path: "assets/logos/staff-verify-splashLogo.png"
+  image_path: "assets/logos/app_logo-500px.png"
   min_sdk_android: 21
   remove_alpha_ios: true
 

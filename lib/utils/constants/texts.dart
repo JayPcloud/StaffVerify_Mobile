@@ -67,9 +67,9 @@ class VTexts {
   static const getStoragePasswordKey = "Password_Remember_Me";
 
   //Image_Strings
-  static const successVerificationIconPng = "assets/images/successful_verification_icon.png";
-  static const failedVerificationIconPng = "assets/images/failed_verification_icon.png";
-  static const appLogo = "assets/logos/StaffVerify_App Logo.png";
+  static const successVerificationIconPng = "assets/icons/successful_verification_icon.png";
+  static const failedVerificationIconPng = "assets/icons/failed_verification_icon.png";
+  static const appLogo = "assets/logos/app_logo-500px.png";
 
   //Icon Image Strings
   static const noPhotoIcon = "assets/icons/nophoto_icon.png";
