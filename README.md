@@ -1,16 +1,21 @@
 # staff_verify
 
-A new Flutter project.
+A staff identity verification and employee registration application.
 
-## Getting Started
+##Overview
+This application provides a reliable solution for staff verification and employee registration. With role-based registration, only authorized personnel can access and manage employee data.
 
-This project is a starting point for a Flutter application.
+# Features
+- *Role-Based Registration*: Ensure that only authorized personnel can access and manage employee data.
+- *Admin-Controlled Registration*: Only admins can add staff or register employees.
+- *Multi-Verification Methods*: Verify staff identities through email, staff ID, phone number, and unique QR code.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+*Technologies Used*
+- *Flutter*: Cross-platform framework for building natively compiled applications.
+- *Firebase*: Backend
+- *Firestore*: Database
+- *Cloudinary*: Cloud-based storage solution for image management.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+
