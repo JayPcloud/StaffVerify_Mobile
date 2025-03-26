@@ -1,8 +1,8 @@
-# staff_verify
+# Staff_Verify
 
 A staff identity verification and employee registration application.
 
-##Overview
+## Overview
 This application provides a reliable solution for staff verification and employee registration. With role-based registration, only authorized personnel can access and manage employee data.
 
 # Features
@@ -11,7 +11,7 @@ This application provides a reliable solution for staff verification and employe
 - *Multi-Verification Methods*: Verify staff identities through email, staff ID, phone number, and unique QR code.
 
 
-*Technologies Used*
+# *Technologies Used*
 - *Flutter*: Cross-platform framework for building natively compiled applications.
 - *Firebase*: Backend
 - *Firestore*: Database
