@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
@@ -14,39 +13,6 @@ import '../../../utils/helpers/device.dart';
 import '../../../utils/helpers/helper_func.dart';
 import '../../staff_verification/models/staff_model.dart';
 import 'package:open_file/open_file.dart';
-//
-// class PdfPreview extends StatelessWidget {
-//   const PdfPreview({super.key});
-//
-//   Future<Uint8List> generateImagePreview() async {
-//     final json = await VStaffRepositories().getStaff(VTexts.emailField, 'nwankwojohnpaul681@gmail.com');
-//     final Staff staff = Staff.fromJson(json[0].data());
-//     final doc = await VRegConfirmationController(staff: staff).openFile(staff);
-//     print(staff);
-//     final image = await doc.save();
-//
-//     return image;
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: FutureBuilder(
-//         future: generateImagePreview(),
-//           builder: (context, snapshot) {
-//           if(snapshot.hasError){
-//             return Center(child: Text(snapshot.error.toString()),);
-//           }
-//             if(snapshot.hasData) {
-//               return Center(child: Text('data'),);
-//             }else{
-//               return Center(child: CircularProgressIndicator());
-//             }
-//           },
-//       ),
-//     );
-//   }
-// }
 
 class VRegConfirmationController extends GetxController {
 
@@ -176,7 +142,11 @@ class VRegConfirmationController extends GetxController {
    Future generateAndSavePdf() async {
      generatingPdf.value = true;
      try {
-       final pdfDoc = await generatePdf();
+       final pdfDoc = await generatePdf().timeout(Duration(seconds: 15),
+           onTimeout: () {
+              throw 'timeout';
+           },
+       );
 
        final file = await saveDocument(name: "${staff.firstname}_info${randomAlphaNumeric(4)}.pdf", pdf: pdfDoc);
 
@@ -185,7 +155,13 @@ class VRegConfirmationController extends GetxController {
        await OpenFile.open(url);
 
      } catch (e) {
-       VHelperFunc.errorNotifier(VTexts.defaultErrorMessage);
+       print(e.toString());
+       if(e == 'timeout') {
+         VHelperFunc.errorNotifier('Timeout! try again');
+       }else {
+         VHelperFunc.errorNotifier(VTexts.defaultErrorMessage);
+       }
+
      }
      generatingPdf.value = false;
 

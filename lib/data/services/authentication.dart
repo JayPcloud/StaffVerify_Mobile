@@ -1,42 +1,60 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:staff_verify/data/repositories/user_repositories.dart';
+import 'package:staff_verify/utils/exceptions/firebase_auth_exceptions.dart';
 
-class VAuthService extends GetxController{
+class VAuthService extends GetxController {
 
-  static final auth = FirebaseAuth.instance;
+  static User? get currentUser => FirebaseAuth.instance.currentUser;
 
-  static User? get currentUser  => FirebaseAuth.instance.currentUser;
+  Future<UserCredential> signUp(
+      {required String email, required String password}) async {
+    try {
+      final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
 
-  void refreshUserRepoInstances() {
-    Get.delete<VUserRepository>();
-    Get.lazyPut<VUserRepository>(()=>VUserRepository());
+      );
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      throw VFirebaseAuthException(code: e.code).message;
+    } catch (e) {
+      throw 'An unexpected error occurred! Please try again later';
+    }
   }
 
-  Future<UserCredential> signUp({required String email, required String password}) async {
-    final userCredential = await auth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    refreshUserRepoInstances();
-    return userCredential;
-  }
-
-  Future<UserCredential> login({required String email, required String password}) async {
-    final userCredential = await auth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    refreshUserRepoInstances();
-    return userCredential;
+  Future<UserCredential> login(
+      {required String email, required String password}) async {
+    try {
+      final userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      throw VFirebaseAuthException(code: e.code).message;
+    } catch (e) {
+      throw 'An unexpected error occurred! Please try again later';
+    }
   }
 
   Future<void> sendPasswordResetLink(String email) async {
-    await auth.sendPasswordResetEmail(email: email);
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      throw VFirebaseAuthException(code: e.code).message;
+    } catch (e) {
+      throw 'An unexpected error occurred! Please try again later';
+    }
   }
 
   Future<void> logout() async {
-    await auth.signOut();
-    refreshUserRepoInstances();
+    try {
+      await FirebaseAuth.instance.signOut();
+    } on FirebaseAuthException catch (e) {
+      throw VFirebaseAuthException(code: e.code).message;
+    } catch (e) {
+      throw Exception('An unexpected error occurred! Please try again later');
+    }
+
   }
 }

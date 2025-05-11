@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
       theme: VThemeData.lightTheme,
-      smartManagement: SmartManagement.onlyBuilder,
+      //smartManagement: SmartManagement.onlyBuilder,
       getPages: VRoutes.instance.pages,
       initialRoute: VRoutes.wrapper,
     );

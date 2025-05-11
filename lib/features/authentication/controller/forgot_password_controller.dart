@@ -2,12 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:staff_verify/utils/constants/colors.dart';
 import '../../../data/services/authentication.dart';
-import '../../../utils/formatters/text_formatter.dart';
 import '../../../utils/helpers/helper_func.dart';
 
 class VForgotPasswordController extends GetxController{
 
-  final _auth = Get.find<VAuthService>();
+  final _auth = Get.put(VAuthService());
 
   final formKey = GlobalKey<FormState>();
 
@@ -20,17 +19,12 @@ class VForgotPasswordController extends GetxController{
       try{
         sendingEmail.value = true;
         await _auth.sendPasswordResetLink(emailController.text.trim());
-        VHelperFunc.snackBarNotifier(msg: "Sent", txtColor: VColors.whiteText);
+        VHelperFunc.snackBarNotifier(msg: "Email Sent", txtColor: VColors.whiteText);
       } catch(e){
-        VHelperFunc.stopLoadingDialog();
-        VHelperFunc.errorNotifier(VTextFormatter.formatFirebaseErrorText(e.toString()));
+        VHelperFunc.errorNotifier(e.toString());
       }
       sendingEmail.value = false;
     }
   }
 
-  // @override
-  // void onClose() {
-  //   super.onClose();
-  // }
 }

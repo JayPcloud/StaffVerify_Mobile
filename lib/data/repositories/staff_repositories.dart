@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:random_string/random_string.dart';
 import 'package:cloudinary_public/cloudinary_public.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:staff_verify/data/services/internet_access__tracker.dart';
 import 'package:staff_verify/features/staff_verification/models/staff_model.dart';
 import '../../utils/constants/texts.dart';
 import '../services/cloud_storage.dart';
@@ -35,13 +35,14 @@ class VStaffRepositories extends GetxController {
     final results = await Future.wait([emailExists,mobileExists]);
 
     if(results[0].docs.isNotEmpty) {
-      throw Exception(alreadyExistingStaffErrConstructor("Email", staff.email!));
+      throw alreadyExistingStaffErrConstructor("Email", staff.email!);
     }else if(results[1].docs.isNotEmpty) {
-      throw Exception(alreadyExistingStaffErrConstructor("Mobile Number", staff.mobileNo.toString()));
+      throw alreadyExistingStaffErrConstructor("Mobile Number", staff.mobileNo.toString());
     }
 
     late String staffID;
 
+    try{
     await _db.runTransaction((transaction) async {
 
       final doc = await transaction.get(_db.collection(VTexts.staffCollection).doc('all_staff_details'));
@@ -53,7 +54,7 @@ class VStaffRepositories extends GetxController {
       final CloudinaryResponse? staffImgUploadResp = await _cloudStorage.uploadImage(imageFile:File(staffImagePath),subfolderName: VTexts.staffImageFolder,);
 
       if(staffImgUploadResp == null) {
-        throw Exception(VTexts.imgUploadFailedErrMsg);
+        throw VTexts.imgUploadFailedErrMsg;
       }
 
       if(totalStaff > 0) {
@@ -70,6 +71,15 @@ class VStaffRepositories extends GetxController {
     },);
 
     return staffID;
+    } catch(e) {
+      print(e.toString());
+      if(e.toString() == VTexts.imgUploadFailedErrMsg) {
+        throw VTexts.imgUploadFailedErrMsg;
+      }else if(e.toString() == VTexts.fireStoreServiceUnavailableErrMsg) {
+        throw "Something went wrong!\nPlease make sure you are connected to the internet";
+      }
+      throw "An unexpected error occurred.\nEnsure a stable internet connection and try again";
+    }
 
   }
 

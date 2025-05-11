@@ -16,9 +16,15 @@ class VTexts {
   static const successfulSignupMsg = "Account created successfully";
 
   //Error Texts
-  static const defaultErrorMessage = "An error occurred!";
+  static const defaultErrorMessage = "An unexpected error occurred!";
+  static const networkErrorMessage = "Network error!\nPlease make sure you are connected to the internet";
   static const retryErrMsg = "Please Try again later";
+  static const requestSupportErrMsg = "Please contact support for assistance";
   static const imgUploadFailedErrMsg = "Couldn't upload Image. Please try again";
+  static const fireStoreServiceUnavailableErrMsg = "[cloud_firestore/unavailable]"
+      " The service is currently unavailable. This is a most likely a transient condition "
+      "and may be corrected by retrying with a backoff.";
+
 
   //-----------fire_store_DB-----------------//
   //Users record

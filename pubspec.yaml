@@ -40,6 +40,8 @@ dependencies:
   open_file: ^3.5.10
   flutter_native_splash: ^2.4.4
   flutter_launcher_icons: ^0.14.3
+  internet_connection_checker: ^3.0.1
+  connectivity_plus: ^6.1.4
 
 
 #  cloudinary_dart: ^1.0.0

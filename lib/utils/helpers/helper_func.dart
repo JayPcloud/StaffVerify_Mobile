@@ -14,6 +14,12 @@ class VHelperFunc extends GetxController {
 
   static void stopLoadingDialog() => Get.back();
 
+  static void closeSnackBar() {
+    if (Get.isSnackbarOpen) {
+      Get.back();
+    }
+  }
+
   static void errorNotifier(
     String err,
   ) {
@@ -21,9 +27,9 @@ class VHelperFunc extends GetxController {
     Get.showSnackbar(VUtilsComponents.errorSnackBarNotifier(err, SnackPosition.TOP));
   }
 
-  static void snackBarNotifier({required String msg, SnackPosition? position, Color? txtColor, double? colorOpacity}) {
+  static void snackBarNotifier({required String msg, SnackPosition? position, Widget? icon, Color? txtColor, double? colorOpacity, Duration? duration = const Duration(seconds: 3), bool showIcon = false}) {
     Get.closeAllSnackbars();
-    Get.showSnackbar(VUtilsComponents.snackBarNotifier(msg: msg,position: position, txtColor: txtColor,colorOpacity:colorOpacity ));
+    Get.showSnackbar(VUtilsComponents.snackBarNotifier(msg: msg,position: position, icon: icon, txtColor: txtColor,colorOpacity:colorOpacity,duration: duration, showIcon:  showIcon));
   }
 
 }

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:staff_verify/common/widgets/utils_components.dart';
@@ -7,6 +6,9 @@ import 'package:staff_verify/features/staff_registration/controller/select_image
 import 'package:staff_verify/features/staff_verification/models/staff_model.dart';
 import 'package:staff_verify/routes/routes.dart';
 import 'package:staff_verify/utils/helpers/helper_func.dart';
+
+import '../../../data/services/internet_access__tracker.dart';
+import '../../../utils/constants/texts.dart';
 
 class VStaffRegController {
 
@@ -65,6 +67,7 @@ class VStaffRegController {
   }
 
   void registerStaff() async {
+
     Get.back();
     showDialog(context: Get.context!, builder: (context) => VUtilsComponents.actionLoader("Registration in progress..."),);
 
@@ -83,13 +86,16 @@ class VStaffRegController {
         qrcodeData: '_'
     );
     try{
+      if(InternetAccessTracker.hasNetworkConnection == false) {
+        throw VTexts.networkErrorMessage;
+      }
       final String staffId = await _staffRepo.registerStaff(staff: staff, staffImagePath: staffImgFilePath);
       await Get.offAndToNamed(VRoutes.vRegConfirm, arguments: staffId);
       _clearAllInputs();
     } catch(e) {
+      print(e.toString());
       Get.back();
       VHelperFunc.errorNotifier(e.toString());
-      print(e.toString());
       return;
     }
 

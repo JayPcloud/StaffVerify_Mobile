@@ -4,7 +4,6 @@ import 'package:get_storage/get_storage.dart';
 import '../../../data/services/authentication.dart';
 import '../../../routes/routes.dart';
 import '../../../utils/constants/texts.dart';
-import '../../../utils/formatters/text_formatter.dart';
 import '../../../utils/helpers/helper_func.dart';
 
 class VLoginController extends GetxController{
@@ -16,7 +15,7 @@ class VLoginController extends GetxController{
   }
 
   /// Class_Instances
-  final _auth = Get.find<VAuthService>();
+  final _auth = Get.put(VAuthService());
   final _getStorage = GetStorage();
 
   /// Variables
@@ -78,7 +77,7 @@ class VLoginController extends GetxController{
 
       } catch(e) {
         VHelperFunc.stopLoadingDialog();
-        VHelperFunc.errorNotifier(VTextFormatter.formatFirebaseErrorText(e.toString()));
+        VHelperFunc.errorNotifier(e.toString());
       }
 
     }

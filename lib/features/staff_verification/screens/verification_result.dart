@@ -44,101 +44,98 @@ class _VerificationResultScreenState extends State<VerificationResultScreen> {
 
     if (controller.vDetails.status == VerificationStatus.success) {
       final staff = controller.vDetails.staff;
-      return PopScope(
-          onPopInvokedWithResult: (didPop, result) =>
-              Get.delete<VerificationResultController>(),
-          child: Scaffold(
-            body: SingleChildScrollView(
-              child: Padding(
-                padding:
-                    VSpacingStyle.paddingWithAppBarHeight.copyWith(bottom: 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      return Scaffold(
+        body: SingleChildScrollView(
+          child: Padding(
+            padding:
+                VSpacingStyle.paddingWithAppBarHeight.copyWith(bottom: 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        Text(
-                          "Staff Details",
-                          style: context.textTheme.displayMedium,
-                        ),
-                        Spacer(),
-                        InkWell(
-                          onTap: controller.popPage,
-                          child: Icon(Icons.close),
-                        )
-                      ],
+                    Text(
+                      "Staff Details",
+                      style: context.textTheme.displayMedium,
                     ),
-                    SizedBox(
-                      height: VSizes.defaultSpace,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          'Date:  ${VDateFormatter.historyDateFormatter(controller.vDetails.date ?? DateTime.now())}',
-                          style: context.textTheme.bodySmall,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: VSizes.spaceBtwItems),
-                    if (staff!.imageUrl != null) ClipRRect(
-                      borderRadius: BorderRadiusDirectional.circular(VSizes.lBRadius),
-                      child: FancyShimmerImage(
-                        shimmerDuration: Duration(seconds: 5),
-                          imageUrl: staff.imageUrl!,
-                          height: VDeviceUtils.screenHeight * 0.4,
-                          width: VDeviceUtils.screenHeight * 0.4,
-                          boxFit: BoxFit.cover,
-                          boxDecoration: BoxDecoration(
-                            color: context.theme.colorScheme.tertiary,
-                            borderRadius: BorderRadiusDirectional.circular(VSizes.lBRadius),
-                          ),
-                        ),
-                    ),
-                    SizedBox(height: VSizes.spaceBtwItems),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${staff.firstname ?? ''} ${staff.lastname ?? ''}',
-                          style: GoogleFonts.merriweather(
-                              textStyle: context.textTheme.labelLarge),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          (staff.role ?? 'Staff Member'),
-                          style: context.textTheme.titleMedium,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: VSizes.defaultSpace,
-                    ),
-                    staffDetailTile(
-                        title: "Staff ID", credential: staff.staffID ?? ''),
-                    staffDetailTile(
-                        title: "Email", credential: staff.email ?? ''),
-                    staffDetailTile(
-                        title: "Phone", credential: staff.mobileNo ?? ''),
-                    staffDetailTile(
-                        title: "Department",
-                        credential: staff.department ?? ''),
-                    staffDetailTile(
-                      title: '',
-                      titleWidget: Text(
-                        "Verification ID",
-                        style: context.textTheme.titleLarge!.copyWith(
-                            color: VColors.successText.withOpacity(0.6)),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      credential: controller.vDetails.id ?? '',
+                    Spacer(),
+                    InkWell(
+                      onTap: controller.popPage,
+                      child: Icon(Icons.close),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: VSizes.defaultSpace,
+                ),
+                Row(
+                  children: [
+                    Text(
+                      'Date:  ${VDateFormatter.historyDateFormatter(controller.vDetails.date ?? DateTime.now())}',
+                      style: context.textTheme.bodySmall,
                     ),
                   ],
                 ),
-              ),
+                SizedBox(height: VSizes.spaceBtwItems),
+                if (staff!.imageUrl != null) ClipRRect(
+                  borderRadius: BorderRadiusDirectional.circular(VSizes.lBRadius),
+                  child: FancyShimmerImage(
+                    shimmerDuration: Duration(seconds: 5),
+                      imageUrl: staff.imageUrl!,
+                      height: VDeviceUtils.screenHeight * 0.4,
+                      width: VDeviceUtils.screenHeight * 0.4,
+                      boxFit: BoxFit.cover,
+                      boxDecoration: BoxDecoration(
+                        color: context.theme.colorScheme.tertiary,
+                        borderRadius: BorderRadiusDirectional.circular(VSizes.lBRadius),
+                      ),
+                    ),
+                ),
+                SizedBox(height: VSizes.spaceBtwItems),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${staff.firstname ?? ''} ${staff.lastname ?? ''}',
+                      style: GoogleFonts.merriweather(
+                          textStyle: context.textTheme.labelLarge),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      (staff.role ?? 'Staff Member'),
+                      style: context.textTheme.titleMedium,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: VSizes.defaultSpace,
+                ),
+                staffDetailTile(
+                    title: "Staff ID", credential: staff.staffID ?? ''),
+                staffDetailTile(
+                    title: "Email", credential: staff.email ?? ''),
+                staffDetailTile(
+                    title: "Phone", credential: staff.mobileNo ?? ''),
+                staffDetailTile(
+                    title: "Department",
+                    credential: staff.department ?? ''),
+                staffDetailTile(
+                  title: '',
+                  titleWidget: Text(
+                    "Verification ID",
+                    style: context.textTheme.titleLarge!.copyWith(
+                        color: VColors.successText.withOpacity(0.6)),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  credential: controller.vDetails.id ?? '',
+                ),
+              ],
             ),
-          ));
+          ),
+        ),
+      );
     } else {
       return PopScope(
           onPopInvokedWithResult: (didPop, result) =>

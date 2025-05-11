@@ -14,7 +14,6 @@ class VHistoryTabView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return PopScope(
       child: Obx(
         () {
@@ -24,7 +23,7 @@ class VHistoryTabView extends StatelessWidget {
           }
 
           if(!controller.initializing && controller.histories.isEmpty) {
-            return Center(child: Text("No Verifications made yet"),);
+            return Center(child: Text("No Verification history"),);
           }
 
           return SingleChildScrollView(

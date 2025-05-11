@@ -20,7 +20,7 @@ class VHomeScreen extends StatefulWidget {
 }
 
 final homeController = Get.put(VHomeController());
-final userRepo = Get.find<VUserRepository>();
+final userRepo = Get.put(VUserRepository.instance);
 
 class _VHomeScreenState extends State<VHomeScreen> {
   @override
@@ -57,69 +57,85 @@ class _VHomeScreenState extends State<VHomeScreen> {
       appBar: AppBar(
         title: FittedBox(
           child: Obx(
-            () => Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Image.asset(
-                  VTexts.noPhotoIcon,
-                  width: VSizes.appBarHeight * 0.4,
-                ),
-                SizedBox(
-                  width: VSizes.spaceBtwItems,
-                ),
-                Text(
-                  userRepo.currentUser.value != null
-                      ? userRepo.currentUser.value!.username!
-                      : '',
-                  style: context.textTheme.displaySmall,
-                ),
-                SizedBox(
-                  width: VSizes.smallSpace,
-                ),
-                Text(
-                  userRepo.currentUser.value != null
-                      ? VUserModel.roleEnumToString(userRepo.currentUser.value!.role)
-                      : '',
-                  style: context.textTheme.bodySmall!
-                      .copyWith(color: context.theme.primaryColor),
-                ),
-              ],
-            ),
-          ),
-        ),
-        actions: [
-          PopupMenuButton(
-            itemBuilder: (context) => [
-              if(userRepo.currentUser.value?.role == VUserRole.admin)PopupMenuItem(
-                  onTap: () => Get.toNamed(VRoutes.staffReg),
-                  child: Row(
+            () => FutureBuilder(
+              future: userRepo.getUser(),
+              builder: (context, snapshot) {
+                if(snapshot.hasData) {
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Icon(Icons.add),
-                      SizedBox(
-                        width: VSizes.smallSpace,
+                      Image.asset(
+                        VTexts.noPhotoIcon,
+                        width: VSizes.appBarHeight * 0.4,
                       ),
-                      Text('Register Staff'),
-                    ],
-                  )),
-              PopupMenuItem(
-                  onTap: homeController.logout,
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.login_outlined,
-                        color: VColors.emphasis,
+                      SizedBox(
+                        width: VSizes.spaceBtwItems,
+                      ),
+                      Text(
+                        snapshot.data!.username!,
+                        style: context.textTheme.displaySmall,
                       ),
                       SizedBox(
                         width: VSizes.smallSpace,
                       ),
                       Text(
-                        'Log Out',
-                        style: TextStyle(color: VColors.emphasis),
+                        VUserModel.roleEnumToString(snapshot.data!.role),
+                        style: context.textTheme.bodySmall!
+                            .copyWith(color: context.theme.primaryColor),
                       ),
                     ],
-                  )),
-            ],
-            //position: PopupMenuPosition.under,
+                  );
+                }
+                return Image.asset(
+                  VTexts.noPhotoIcon,
+                  width: VSizes.appBarHeight * 0.4,
+                );
+              },
+            ),
+          ),
+        ),
+        actions: [
+          FutureBuilder(
+            future: userRepo.getUser(),
+            builder: ( context,snapshot) {
+              if(snapshot.hasData) {
+                return PopupMenuButton(
+                  itemBuilder: (context) => [
+                    if( snapshot.data!.role == VUserRole.admin)PopupMenuItem(
+                        onTap: () => Get.toNamed(VRoutes.staffReg),
+                        child: Row(
+                          children: [
+                            Icon(Icons.add),
+                            SizedBox(
+                              width: VSizes.smallSpace,
+                            ),
+                            Text('Register Staff'),
+                          ],
+                        )),
+                    PopupMenuItem(
+                        onTap: homeController.logout,
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.login_outlined,
+                              color: VColors.emphasis,
+                            ),
+                            SizedBox(
+                              width: VSizes.smallSpace,
+                            ),
+                            Text(
+                              'Log Out',
+                              style: TextStyle(color: VColors.emphasis),
+                            ),
+                          ],
+                        )),
+                  ],
+                  //position: PopupMenuPosition.under,
+                );
+              }else {
+                return SizedBox();
+              }
+            },
           ),
         ],
       ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/helper_utils.dart';
 import 'package:get/get.dart';
 import 'package:staff_verify/common/widgets/action_button.dart';
+import 'package:staff_verify/utils/helpers/helper_func.dart';
 import '../../utils/constants/colors.dart';
 import '../../utils/constants/sizes.dart';
 
@@ -97,10 +99,13 @@ class VUtilsComponents {
     );
   }
 
-  static GetSnackBar snackBarNotifier({required String msg, SnackPosition? position, Color? txtColor, double? colorOpacity}) {
+  static GetSnackBar snackBarNotifier({required String msg, SnackPosition? position, Color? txtColor,
+    double? colorOpacity, Widget? icon, Duration? duration, bool showIcon = false}) {
     return GetSnackBar(
       snackPosition: position??SnackPosition.BOTTOM,
-      duration: Duration(seconds: 3),
+      duration: duration,
+      isDismissible: true,
+      icon: showIcon?icon??IconButton(onPressed: Get.closeAllSnackbars, icon: Icon(Icons.close)):null,
       animationDuration: Duration(milliseconds: 500),
       dismissDirection: DismissDirection.horizontal,
       borderRadius: VSizes.smallBRadius,
@@ -112,7 +117,7 @@ class VUtilsComponents {
           style: Get.context!.textTheme.labelSmall!
               .copyWith(color:txtColor??VColors.darkText,fontWeight: FontWeight.normal),
         ),
-      ),
+      )
     );
   }
 }

@@ -6,7 +6,6 @@ import 'package:staff_verify/data/repositories/user_repositories.dart';
 import 'package:staff_verify/routes/routes.dart';
 import 'package:staff_verify/utils/constants/colors.dart';
 import 'package:staff_verify/utils/constants/texts.dart';
-import 'package:staff_verify/utils/formatters/text_formatter.dart';
 import 'package:staff_verify/utils/helpers/helper_func.dart';
 import '../../../utils/validators/textField_validators.dart';
 import '../models/user_model.dart';
@@ -14,8 +13,8 @@ import '../models/user_model.dart';
 class VSignUpController extends GetxController {
 
   /// Class_instances
-  final _auth = Get.find<VAuthService>();
-  final _userRepo = Get.find<VUserRepository>();
+  final _auth = Get.put(VAuthService());
+  final _userRepo = Get.put(VUserRepository.instance);
   final _getStorage = GetStorage();
 
 
@@ -83,7 +82,7 @@ class VSignUpController extends GetxController {
 
       } catch(e) {
         VHelperFunc.stopLoadingDialog();
-        VHelperFunc.errorNotifier(VTextFormatter.formatFirebaseErrorText(e.toString()));
+        VHelperFunc.errorNotifier(e.toString());
       }
     }
   }

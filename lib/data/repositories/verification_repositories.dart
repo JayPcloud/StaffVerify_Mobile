@@ -6,28 +6,29 @@ import 'package:staff_verify/utils/constants/texts.dart';
 
 class VerificationRepositories extends GetxController {
 
-  final _auth = FirebaseAuth.instance;
   final _db = FirebaseFirestore.instance;
 
   Future<VHistoryModel> recordToVerificationHistory(VHistoryModel history) async {
+
     await _db.collection(VTexts.verificationsCollection).doc().set(history.toJson());
 
     final doc = await _db.collection(VTexts.verificationsCollection).where(VTexts.vDateField, isEqualTo: history.timestamp)
         .where(VTexts.staffIDField, isEqualTo: history.staffId).get();
 
-    await _db.collection(VTexts.usersCollection).doc(_auth.currentUser!.uid).collection(VTexts.userVerificationHistoryCollection
+    await _db.collection(VTexts.usersCollection).doc(FirebaseAuth.instance.currentUser!.uid).collection(VTexts.userVerificationHistoryCollection
     ).doc(doc.docs[0].id).set(history.toJson());
 
     return VHistoryModel.fromJson(doc.docs[0]);
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> fetchHistories(int limit)  {
-     return _db.collection(VTexts.usersCollection).doc(_auth.currentUser!.uid).collection(VTexts.userVerificationHistoryCollection)
+
+     return _db.collection(VTexts.usersCollection).doc(FirebaseAuth.instance.currentUser!.uid).collection(VTexts.userVerificationHistoryCollection)
     .orderBy(VTexts.vDateField, descending: true).limit(limit).snapshots();
   }
 
   Future<QuerySnapshot<Map<String, dynamic>>> fetchMoreHistories(int limit, DocumentSnapshot lastDocument)  {
-    return _db.collection(VTexts.usersCollection).doc(_auth.currentUser!.uid).collection(VTexts.userVerificationHistoryCollection)
+    return _db.collection(VTexts.usersCollection).doc(FirebaseAuth.instance.currentUser!.uid).collection(VTexts.userVerificationHistoryCollection)
         .orderBy(VTexts.vDateField, descending: true).startAfterDocument(lastDocument).limit(limit).get();
   }
 }

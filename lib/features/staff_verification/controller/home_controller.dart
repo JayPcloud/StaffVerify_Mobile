@@ -11,31 +11,15 @@ import 'package:staff_verify/features/staff_verification/models/verification_det
 import 'package:staff_verify/routes/routes.dart';
 import 'package:staff_verify/utils/constants/enums.dart';
 import 'package:staff_verify/utils/constants/texts.dart';
-import 'package:staff_verify/utils/formatters/text_formatter.dart';
 import 'package:staff_verify/utils/helpers/helper_func.dart';
 import '../../../data/repositories/staff_repositories.dart';
+import '../../../data/services/internet_access__tracker.dart';
 
 class VHomeController extends GetxController {
 
-  // @override
-  // void onInit() {
-  //   focusNode.value.addListener(
-  //     () {
-  //       if(focusNode.value.hasFocus) {
-  //         if(!hasFocus.value) {
-  //           hasFocus.value = true;}
-  //       }else {
-  //         if(hasFocus.value) {hasFocus.value = false;
-  //         }
-  //       }
-  //     },
-  //   );
-  //   super.onInit();
-  // }
-
-  final _auth = Get.find<VAuthService>();
-  final _staffRepo = Get.find<VStaffRepositories>();
-  final _verificationRepo = Get.find<VerificationRepositories>();
+  final _auth = Get.put(VAuthService());
+  final _staffRepo = Get.put(VStaffRepositories());
+  final _verificationRepo = Get.put(VerificationRepositories());
 
   // Variables
   RxInt bodyIndex = 0.obs;
@@ -68,14 +52,6 @@ class VHomeController extends GetxController {
 
     }
   }
-
-  // void toggleQRScanButton(int index) {
-  //   if(index == 0) {
-  //     isHomeTabActive.value = true;
-  //   }else {
-  //     isHomeTabActive.value = false;
-  //   }
-  // }
 
   void changeBodyIndex(int index) => bodyIndex.value = index;
 
@@ -115,6 +91,10 @@ class VHomeController extends GetxController {
   Future<void> verifyStaff(VerificationMethod vMethod) async {
     focusNode.value.unfocus();
     try {
+      if(InternetAccessTracker.hasNetworkConnection == false) {
+        VHelperFunc.errorNotifier('No Network Connection');
+        return;
+      }
 
       List<QueryDocumentSnapshot<Map<String, dynamic>>>? docs;
 
@@ -164,9 +144,9 @@ class VHomeController extends GetxController {
         }
 
         if (docs.length > 1) {
-          VHelperFunc.errorNotifier(
-              "Found Two staffs associated with ${vMethod.toString()} '${textFieldController.value.text.trim()}'");
+          VHelperFunc.errorNotifier("Found Two staffs associated with ${vMethod.toString()} '${textFieldController.value.text.trim()}'");
         }
+
         Get.toNamed(VRoutes.vResults,
             arguments: VerificationDetailsModel(
                 id: history.vid,
@@ -181,8 +161,7 @@ class VHomeController extends GetxController {
       ///------------remove---------------///
       print(e.toString());
       VHelperFunc.stopLoadingDialog();
-      VHelperFunc.errorNotifier(
-          VTextFormatter.formatFirebaseErrorText(e.toString()));
+      VHelperFunc.errorNotifier('Something went wrong, please try again later');
     }
   }
 
@@ -216,9 +195,7 @@ class VHomeController extends GetxController {
 
       if (_scanBarcode != null && _scanBarcode != '-1') {
         await verifyStaff(VerificationMethod.qrCode);
-      } else {
-        //VHelperFunc.errorNotifier(VTexts.defaultErrorMessage);
-      }
+      } else {}
 
   }
 
@@ -230,8 +207,7 @@ class VHomeController extends GetxController {
       await Future.delayed(Duration(milliseconds: 500));
       Get.offAllNamed(VRoutes.wrapper);
     } catch (e) {
-      VHelperFunc.errorNotifier(
-          VTextFormatter.formatFirebaseErrorText(e.toString()));
+      VHelperFunc.errorNotifier(e.toString());
     }
   }
 }

@@ -11,14 +11,18 @@ import '../../../utils/validators/textField_validators.dart';
 import '../components/gender_dropDown_FormField.dart';
 import '../controller/staff_reg_controller.dart';
 
-class VStaffRegScreen extends StatelessWidget {
+class VStaffRegScreen extends StatefulWidget {
   const VStaffRegScreen({super.key});
 
   @override
+  State<VStaffRegScreen> createState() => _VStaffRegScreenState();
+}
+
+class _VStaffRegScreenState extends State<VStaffRegScreen> {
+  final VStaffRegController controller = VStaffRegController();
+
+  @override
   Widget build(BuildContext context) {
-
-    final controller = VStaffRegController();
-
     return Scaffold(
       bottomNavigationBar: Padding(
         padding: VSpacingStyle.defaultPadding,
